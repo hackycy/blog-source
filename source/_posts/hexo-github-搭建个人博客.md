@@ -317,9 +317,45 @@ body {
 ```
 本地图片将图片放至主题目录下 __ source\images __
 
+## 打赏功能
+
+找到Next主题下的配置文件中的：
+
+``` yaml
+# Reward
+reward_comment: 坚持技术分享，您的支持将鼓励我继续创作！
+wechatpay: /images/wechatpay.png
+alipay: /images/alipay.jpg
+#bitcoin: /images/bitcoin.png
+```
+
+配置文字和对应收款码即可
+
+**删除打赏文字闪动样式**
+
+进入`themes\next\source\css\_common\components\post\post-reward.styl`,找到以下样式并删除
+
+``` css
+#wechat:hover p{
+    animation: roll 1s infinite linear;
+    -webkit-animation: roll 1s infinite linear;
+    -moz-animation: roll 1s infinite linear;
+}
+#alipay:hover p{
+    animation: roll 1s infinite linear;
+    -webkit-animation: roll 1s infinite linear;
+    -moz-animation: roll 1s infinite linear;
+}
+#bitcoin:hover p {
+    animation: roll 1s infinite linear;
+    -webkit-animation: roll 1s infinite linear;
+    -moz-animation: roll 1s infinite linear;
+}
+```
+
 ## 修改文章底部的那个带#号的标签
 
-** 具体实现方法 **
+**具体实现方法**
 
 修改模板 ` /themes/next/layout/_macro/post.swig` ，搜索 `rel="tag"># `，将`# `换成 ` <i class="fa fa-tag"></i>`
 
@@ -418,6 +454,24 @@ vendors:
   fancybox: //cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js
   fancybox_css: //cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css
 ```
+
+## 代码块复制
+
+在Next主题配置文件中找到：
+
+``` yaml
+codeblock:
+  # Manual define the border radius in codeblock
+  # Leave it empty for the default 1
+  border_radius:
+  # Add copy button on codeblock
+  copy_button:
+    enable: true
+    # Show text copy result
+    show_result: true
+```
+
+开启即可
 
 # 部署
 
