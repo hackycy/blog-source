@@ -104,6 +104,10 @@ $ hexo clean
 theme: next
 ```
 
+> 该文章下配置的主题基于**2014-2017	https://github.com/iissnan/hexo-theme-next**的版本
+>
+> 更多版本请看：https://theme-next.org/
+
 ## 主题设定
 
 选择 Scheme
@@ -111,9 +115,10 @@ theme: next
 Scheme 是 NexT 提供的一种特性，借助于 Scheme，NexT 为你提供多种不同的外观。同时，几乎所有的配置都可以 在 Scheme 之间共用。目前 NexT 支持三种 Scheme，他们是：
 - Muse - 默认 Scheme，这是 NexT 最初的版本，黑白主调，大量留白
 - Mist - Muse 的紧凑版本，整洁有序的单栏外观
-- Pisces - 双栏 Scheme，小家碧玉似的清新
 - Gemini - 左侧网站信息及目录，块+片段结构布局 
-Scheme 的切换通过更改 主题配置文件，搜索 scheme 关键字。 你会看到有四行 scheme 的配置，将你需用启用的 scheme 前面注释 # 去除即可。
+
+
+> Scheme 的切换通过更改 主题配置文件，搜索 scheme 关键字。 你会看到有四行 scheme 的配置，将你需用启用的 scheme 前面注释 # 去除即可。
 
 ## 动态背景
 
@@ -135,7 +140,7 @@ Scheme 的切换通过更改 主题配置文件，搜索 scheme 关键字。 你
 !function(e,t,a){function n(){c(".heart{width: 10px;height: 10px;position: fixed;background: #f00;transform: rotate(45deg);-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);}.heart:after,.heart:before{content: '';width: inherit;height: inherit;background: inherit;border-radius: 50%;-webkit-border-radius: 50%;-moz-border-radius: 50%;position: fixed;}.heart:after{top: -5px;}.heart:before{left: -5px;}"),o(),r()}function r(){for(var e=0;e<d.length;e++)d[e].alpha<=0?(t.body.removeChild(d[e].el),d.splice(e,1)):(d[e].y--,d[e].scale+=.004,d[e].alpha-=.013,d[e].el.style.cssText="left:"+d[e].x+"px;top:"+d[e].y+"px;opacity:"+d[e].alpha+";transform:scale("+d[e].scale+","+d[e].scale+") rotate(45deg);background:"+d[e].color+";z-index:99999");requestAnimationFrame(r)}function o(){var t="function"==typeof e.onclick&&e.onclick;e.onclick=function(e){t&&t(),i(e)}}function i(e){var a=t.createElement("div");a.className="heart",d.push({el:a,x:e.clientX-5,y:e.clientY-5,scale:1,alpha:1,color:s()}),t.body.appendChild(a)}function c(e){var a=t.createElement("style");a.type="text/css";try{a.appendChild(t.createTextNode(e))}catch(t){a.styleSheet.cssText=e}t.getElementsByTagName("head")[0].appendChild(a)}function s(){return"rgb("+~~(255*Math.random())+","+~~(255*Math.random())+","+~~(255*Math.random())+")"}var d=[];e.requestAnimationFrame=function(){return e.requestAnimationFrame||e.webkitRequestAnimationFrame||e.mozRequestAnimationFrame||e.oRequestAnimationFrame||e.msRequestAnimationFrame||function(e){setTimeout(e,1e3/60)}}(),n()}(window,document);
 ```
 
-拷贝所有代码，在/themes/next/source/js/src里面新建love.js，然后在\themes\next\layout\_layout.swig文件末尾添加以下代码：
+拷贝所有代码，在/themes/next/source/js/src里面新建love.js，然后在`\themes\next\layout\_layout.swig`文件末尾添加以下代码：
 
 ``` javascript
 <!-- 页面点击小红心 --> 
@@ -169,7 +174,13 @@ local_search:
   unescape: false
 ```
 
-## [加载进度条](https://github.com/theme-next/theme-next-pace)
+## [页面加载进度条](https://github.com/theme-next/theme-next-pace)
+
+Change dir to **NexT** directory. There must be `layout`, `source`, `languages` and other directories:
+
+```bash
+$ cd themes/next
+```
 
 Install module to `source/lib` directory:
 
@@ -197,7 +208,53 @@ vendors:
   pace_css: //cdn.jsdelivr.net/npm/pace-js@1/themes/blue/pace-theme-minimal.css
 ```
 
+> **Themes list:**
+> - pace-theme-big-counter
+> - pace-theme-bounce
+> - pace-theme-barber-shop
+> - pace-theme-center-atom
+> - pace-theme-center-circle
+> - pace-theme-center-radar
+> - pace-theme-center-simple
+> - pace-theme-corner-indicator
+> - pace-theme-fill-left
+> - pace-theme-flash
+> - pace-theme-loading-bar
+> - pace-theme-mac-osx
+> - pace-theme-minimal
+>
 > 各种进度条样式的预览效果：https://github.hubspot.com/pace/docs/welcome/
+
+## [文章浏览进度条](https://github.com/theme-next/theme-next-reading-progress)
+
+Change dir to **NexT** directory. There must be `layout`, `source`, `languages` and other directories:
+
+```bash
+$ cd themes/next
+```
+
+Install module to `source/lib` directory:
+
+```bash
+$ git clone https://github.com/theme-next/theme-next-reading-progress source/lib/reading_progress
+```
+
+Enable module in **NexT** `_config.yml` file:
+
+```yaml
+reading_progress:
+  enable: true
+  color: "#37c6c0"
+  height: 2px
+```
+
+**And, if you wants to use the CDN, then need to set:**
+
+```yaml
+vendors:
+  ...
+  reading_progress: //cdn.jsdelivr.net/gh/theme-next/theme-next-reading-progress@1/reading_progress.min.js
+```
 
 ## 实现统计功能
 
@@ -362,7 +419,6 @@ vendors:
   fancybox_css: //cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css
 ```
 
-
 # 部署
 
 首先需要进行创建您个人的github账户
@@ -467,6 +523,7 @@ tags:
 categories 是用来给文章分类的，它跟 tags 不同的是其具有顺序性和层次性。
 
 categories 的用法同 tags 一样，只不过斗个 categories 值是分先后顺序的。
+
 ``` markdown
 categories:
 - hexo
@@ -491,6 +548,236 @@ tags:
 <!-- more -->
 紧接着文章摘要的正文内容
 ```
-这样，__ <!-- more --> __ 之前、文档配置参数之后中的内容便会被渲染为站点中的文章摘要。
+这样， `<!-- more -->`  之前、文档配置参数之后中的内容便会被渲染为站点中的文章摘要。
 
 注意！文章摘要在文章详情页是正文中最前面的内容。
+
+# Hexo内置标签
+
+## Note提示块
+
+{% note default %}
+default 提示块标签
+{% endnote %}
+
+{% note primary %}
+primary 提示块标签
+{% endnote %}
+
+{% note success %}
+success 提示块标签
+{% endnote %}
+
+{% note info %}
+info 提示块标签
+{% endnote %}
+
+{% note warning %}
+warning 提示块标签
+{% endnote %}
+
+{% note danger %}
+danger 提示块标签
+{% endnote %}
+
+使用方法：
+
+``` template
+{% note default %}
+default 提示块标签
+{% endnote %}
+
+{% note primary %}
+primary 提示块标签
+{% endnote %}
+
+{% note success %}
+success 提示块标签
+{% endnote %}
+
+{% note info %}
+info 提示块标签
+{% endnote %}
+
+{% note warning %}
+warning 提示块标签
+{% endnote %}
+
+{% note danger %}
+danger 提示块标签
+{% endnote %}
+```
+
+Next主题配置文件可以修改风格：
+
+``` yaml
+# Note tag (bs-callout).
+note:
+  # Note tag style values:
+  #  - simple    bs-callout old alert style. Default.
+  #  - modern    bs-callout new (v2-v3) alert style.
+  #  - flat      flat callout style with background, like on Mozilla or StackOverflow.
+  #  - disabled  disable all CSS styles import of note tag.
+  style: flat
+  icons: true
+  border_radius: 3
+  # Offset lighter of background in % for modern and flat styles (modern: -12 | 12; flat: -18 | 6).
+  # Offset also applied to label tag variables. This option can work with disabled note tag.
+  light_bg_offset: 0
+```
+
+## Tab标签
+
+tab 标签用于快速创建 tab 选项卡，语法如下
+
+```
+{% tabs [Unique name], [index] %}
+  <!-- tab [Tab caption]@[icon] -->
+  标签页内容（支持行内标签）
+  <!-- endtab -->
+{% endtabs %}
+```
+
+其中，各参数意义如下：
+
+- Unique name: 全局唯一的 Tab 名称，将作为各个标签页的 id 属性前缀
+- index: 当前激活的标签页索引，如果未定义则默认选中显示第一个标签页，如果设为 - 1 则默认隐藏所有标签页
+- Tab caption: 当前标签页的标题，如果不指定则会以 Unique name 加上索引作为标题
+- icon: 在标签页标题中添加 Font awesome 图标
+
+使用示例如下：
+
+``` template
+{% tabs Tab标签列表 %}
+  <!-- tab 标签页1 -->
+    标签页1文本内容
+  <!-- endtab -->
+  <!-- tab 标签页2 -->
+    标签页2文本内容
+  <!-- endtab -->
+  <!-- tab 标签页3 -->
+    标签页3文本内容
+  <!-- endtab -->
+{% endtabs %}
+```
+
+{% tabs Tab标签列表 %}
+  <!-- tab 标签页1 -->
+    标签页1文本内容
+  <!-- endtab -->
+  <!-- tab 标签页2 -->
+    标签页2文本内容
+  <!-- endtab -->
+  <!-- tab 标签页3 -->
+    标签页3文本内容
+  <!-- endtab -->
+{% endtabs %}
+
+Next主题配置查看
+
+``` yaml
+# Tabs tag.
+tabs:
+  enable: true
+  transition:
+    tabs: true
+    labels: true
+  border_radius: 0
+```
+
+## Label标签
+
+通过 label 标签可以为文字添加背景色，语法如下：
+
+``` template
+{% label [class]@text  %}
+```
+
+支持的 class 种类包括 `default` `primary` `success` `info` `warning` `danger`，默认使用 `default` 作为缺省。
+
+使用示例如下：
+
+```txt
+I heard the echo, {% label default@from the valleys and the heart %}
+Open to the lonely soul of {% label info@sickle harvesting %}
+Repeat outrightly, but also repeat the well-being of
+Eventually {% label warning@swaying in the desert oasis %}
+{% label success@I believe %} I am
+{% label primary@Born as the bright summer flowers %}
+Do not withered undefeated fiery demon rule
+Heart rate and breathing to bear {% label danger@the load of the cumbersome %}
+Bored
+```
+
+> I heard the echo, {% label default@from the valleys and the heart %}
+> Open to the lonely soul of {% label info@sickle harvesting %}
+> Repeat outrightly, but also repeat the well-being of
+> Eventually {% label warning@swaying in the desert oasis %}
+> {% label success@I believe %} I am
+> {% label primary@Born as the bright summer flowers %}
+> Do not withered undefeated fiery demon rule
+> Heart rate and breathing to bear {% label danger@the load of the cumbersome %}
+> Bored
+
+可在主题配置文件中设置 `label: false` 来取消 label 标签默认 CSS 样式。
+
+## Button按钮
+
+通过 button 标签可以快速添加带有主题样式的按钮，语法如下：
+
+``` template
+{% button /path/to/url/, text, icon [class], title %}
+```
+
+也可简写为：
+
+```template
+{% btn /path/to/url/, text, icon [class], title %}
+```
+
+其中， 图标 ID 来源于 [FontAwesome](https://fontawesome.com/v4.7.0/icons/) 。
+
+使用示例如下：
+
+```template
+{% btn #, 文本 %}
+{% btn #, 文本 & 标题,, 标题 %}
+{% btn #, 文本 & 图标, home %}
+{% btn #, 文本 & 大图标 (固定宽度), home fa-fw fa-lg %}
+```
+
+> {% btn #, 文本 %}
+> {% btn #, 文本 & 标题,, 标题 %}
+> {% btn #, 文本 & 图标, home %}
+> {% btn #, 文本 & 大图标 (固定宽度), home fa-fw fa-lg %}
+
+## 引用站内链接
+
+可以通过如下语法引入站内文章的地址或链接：
+
+```
+{% post_path slug %}
+{% post_link slug [title] %}
+```
+
+其中，`slug` 表示 `_post` 目录下的 Markdown 文件名。
+
+`post_path` 标签将会渲染为文章的地址，即 `permalink`；而 `post_link` 标签将会渲染为链接，可以通过 `title` 指定链接标题。
+
+如以下标签将会生成 `/posts/hexo-github-搭建个人博客.html`
+
+```swig
+{% post_path hexo-github-搭建个人博客 %}
+```
+
+而以下标签则会生成{% post_path hexo-github-搭建个人博客 链接标题 %}
+
+```swig
+{% post_link hexo-github-搭建个人博客 链接标题 %}
+```
+
+这种站内引用方式比直接使用 url 引用的形式更为可靠，因为即使修改了 `permalink` 格式，或者修改了文章的路由地址，只要 Markdown 文件名没有发生改变，引用链接都不会失效。
+
+# 参考链接
+
+http://yearito.cn/posts/hexo-writing-skills.html
