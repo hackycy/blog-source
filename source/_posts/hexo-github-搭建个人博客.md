@@ -129,7 +129,11 @@ Scheme 的切换通过更改 主题配置文件，搜索 scheme 关键字。 你
 
 ## 点击出现桃心效果
 
-浏览器输入：[http://7u2ss1.com1.z0.glb.clouddn.com/love.js](http://7u2ss1.com1.z0.glb.clouddn.com/love.js)
+**lover.js**代码：
+
+``` javascript
+!function(e,t,a){function n(){c(".heart{width: 10px;height: 10px;position: fixed;background: #f00;transform: rotate(45deg);-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);}.heart:after,.heart:before{content: '';width: inherit;height: inherit;background: inherit;border-radius: 50%;-webkit-border-radius: 50%;-moz-border-radius: 50%;position: fixed;}.heart:after{top: -5px;}.heart:before{left: -5px;}"),o(),r()}function r(){for(var e=0;e<d.length;e++)d[e].alpha<=0?(t.body.removeChild(d[e].el),d.splice(e,1)):(d[e].y--,d[e].scale+=.004,d[e].alpha-=.013,d[e].el.style.cssText="left:"+d[e].x+"px;top:"+d[e].y+"px;opacity:"+d[e].alpha+";transform:scale("+d[e].scale+","+d[e].scale+") rotate(45deg);background:"+d[e].color+";z-index:99999");requestAnimationFrame(r)}function o(){var t="function"==typeof e.onclick&&e.onclick;e.onclick=function(e){t&&t(),i(e)}}function i(e){var a=t.createElement("div");a.className="heart",d.push({el:a,x:e.clientX-5,y:e.clientY-5,scale:1,alpha:1,color:s()}),t.body.appendChild(a)}function c(e){var a=t.createElement("style");a.type="text/css";try{a.appendChild(t.createTextNode(e))}catch(t){a.styleSheet.cssText=e}t.getElementsByTagName("head")[0].appendChild(a)}function s(){return"rgb("+~~(255*Math.random())+","+~~(255*Math.random())+","+~~(255*Math.random())+")"}var d=[];e.requestAnimationFrame=function(){return e.requestAnimationFrame||e.webkitRequestAnimationFrame||e.mozRequestAnimationFrame||e.oRequestAnimationFrame||e.msRequestAnimationFrame||function(e){setTimeout(e,1e3/60)}}(),n()}(window,document);
+```
 
 拷贝所有代码，在/themes/next/source/js/src里面新建love.js，然后在\themes\next\layout\_layout.swig文件末尾添加以下代码：
 
@@ -143,7 +147,60 @@ Scheme 的切换通过更改 主题配置文件，搜索 scheme 关键字。 你
 默认的网站图标是一个N，当然是需要制定一个图了，在网上找到图后，将其放在 __ /themes/next/source/images __ 里面,找到主题配置文件中的favicon关键字，进行替换,如图
 ![](favicon_replace.png)
 
+## [本地搜索](https://github.com/theme-next/hexo-generator-searchdb)
+
+安装插件：
+
+``` bash
+npm install hexo-generator-searchdb
+```
+
+配置`__config.yml`
+
+``` yaml
+local_search:
+  enable: true
+  # if auto, trigger search by changing input
+  # if manual, trigger search by pressing enter key or search button
+  trigger: auto
+  # show top n results per article, show all results by setting to -1
+  top_n_per_article: 1
+  # unescape html strings to the readable one
+  unescape: false
+```
+
+## [加载进度条](https://github.com/theme-next/theme-next-pace)
+
+Install module to `source/lib` directory:
+
+```bash
+$ git clone https://github.com/theme-next/theme-next-pace source/lib/pace
+```
+
+Enable module in **NexT** `_config.yml` file and select your theme:
+
+```yaml
+pace:
+  enable: true
+  # Themes list:
+  # big-counter | bounce | barber-shop | center-atom | center-circle | center-radar | center-simple
+  # corner-indicator | fill-left | flat-top | flash | loading-bar | mac-osx | material | minimal
+  theme: minimal
+```
+
+**And, if you wants to use the CDN, then need to set:** (you also need to find your corresponding theme css link in [jsdelivr](https://www.jsdelivr.com/package/npm/pace-js?path=themes))
+
+```yaml
+vendors:
+  ...
+  pace: //cdn.jsdelivr.net/npm/pace-js@1/pace.min.js
+  pace_css: //cdn.jsdelivr.net/npm/pace-js@1/themes/blue/pace-theme-minimal.css
+```
+
+> 各种进度条样式的预览效果：https://github.hubspot.com/pace/docs/welcome/
+
 ## 实现统计功能
+
 ** 实现效果图 **
 ![](word_count.png)
 
@@ -193,13 +250,13 @@ word_count: true
 ## 添加背景
 在 __ theme/next/source/css/_custom __ 文件夹下打开 __ custom.styl __ 文件，往里面添加以下代码：
 ``` css
-body{   
+body {   
         background:url(图片链接);
         background-size:cover;
         background-repeat:no-repeat;
         background-attachment:fixed;
         background-position:center;
-     }
+}
 ```
 本地图片将图片放至主题目录下 __ source\images __
 
@@ -207,17 +264,19 @@ body{
 
 ** 具体实现方法 **
 
-修改模板 __ /themes/next/layout/_macro/post.swig __ ，搜索 __ rel="tag"># __ ，将 __ # __ 换成 __ <i class="fa fa-tag"></i> __
+修改模板 ` /themes/next/layout/_macro/post.swig` ，搜索 `rel="tag"># `，将`# `换成 ` <i class="fa fa-tag"></i>`
 
 ## 在网站底部加上访问量
 
 ** 具体实现方法 **
-打开 __ \themes\next\layout\_partials\footer.swig __ 文件,在 __ copyright __ 前加上画红线这句话：
+打开 `\themes\next\layout\_partials\footer.swig` 文件,在`copyright`前加上画红线这句话：
+
 ``` javascript
 <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 ```
 然后再合适的位置添加显示统计的代码，如图：
 ![](site_count.png)
+
 ``` html
 <div class="powered-by">
     <i class="fa fa-user-md"></i>
