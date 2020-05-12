@@ -112,13 +112,15 @@ public final class TimeUtils {
 }
 ```
 
+> 原理就是通过HTTP Header来获取服务器时间（注：时间格式以[RFC-7231](https://link.jianshu.com/?t=https%3A%2F%2Ftools.ietf.org%2Fhtml%2Frfc7231%23section-7.1.1.1)中定义的"HTTP日期"格式来发送）
+>
 > 在OkHttpClient增加该Utils下的拦截器即可。
 >
 > 由于项目中只需要精确到秒，而获取的都是精确到毫秒级别，所以TimeUtils下获取的时候做了除以1000处理。可能会存在点误差吧。但是在项目中误差范围不大，还在可接受范围内。
 >
 > 不足：连接服务器的过程是需要时间的，服务器收到请求时刻的时间与应用收到响应存在一定的时间差，导致误差的存在（误差=服务器发出响应->到本机收到响应这个时间）。
 >
-> 但是通过通过上面的TimeSyncInterceptor每次判断，可以使得误差逐渐降低
+> 但是通过上面的TimeSyncInterceptor每次判断，可以使得误差逐渐降低
 
 # 参考资料
 
