@@ -211,12 +211,22 @@ sudo gem install cocoapods -n /usr/local/bin
 
 两行解决问题。或者可以尝试重新安装。
 
+# ERROR: While executing gem ... (Gem::FilePermissionError)
 
-# 参考
-- https://juejin.im/entry/5c067eb56fb9a04a0a5ef583?utm_source=gold_browser_extension
-- https://guides.cocoapods.org/syntax/podfile.html#podfile
-- https://www.jianshu.com/p/91f3b9d8f402
+更换语句`sudo gem install -n /usr/local/bin`加上 项目名
+
+```bash
+$ sudo gem install -n /usr/local/bin fastlane
+$ sudo gem install -n /usr/local/bin cocoapods
+```
+
+> 建议的是用 [homebrew](http://brew.sh/) 再装一个 ruby, 这样 local 归 local, system 归 system. 反正也不大.
 
 
+# 参考资料
+https://juejin.im/entry/5c067eb56fb9a04a0a5ef583?utm_source=gold_browser_extension
+https://guides.cocoapods.org/syntax/podfile.html#podfile
+https://www.jianshu.com/p/91f3b9d8f402
+https://blog.csdn.net/u014599371/article/details/89916513
 
 
