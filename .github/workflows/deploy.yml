@@ -12,6 +12,8 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '10.x'
+      - name: clone
+        run: git clone https://github.com/hackycy/hackycy.github.io.git .deploy_git
       - name: NPM
         run: npm install
       - name: Clean
