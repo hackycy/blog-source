@@ -46,9 +46,11 @@ $ cat github-actions-deploy.pub
 
 # 添加Github Action
 
-可以在网页上 **Actions** 里编辑配置文件，也可以直接在本地目录添加直接 commit。
+可以在网页上 **Actions** 里编辑配置文件，也可以直接在源文件的仓库的本地目录添加直接 commit。
 
-本文直接在本地目录提交配置文件的话，将配置文件存至 `.github/workflows/*随便起名*.yml`。
+本文直接在源文件的仓库的本地目录提交配置文件，将配置文件存至原文件仓库目录下的 `.github/workflows/*随便起名*.yml`。
+
+脚本配置如下：
 
 ``` yaml
 name: Deploy
@@ -102,8 +104,9 @@ jobs:
 3. `runs-on` 设置运行平台，目前有 Windows、Ubuntu、macOS，见[文档](https://help.github.com/en/articles/virtual-environments-for-github-actions)。
 4. `uses` 是使用打包好的 action，可以通过 `with` 传参数。官方提供了一些 Git 基本操作和环境安装的包，也可以使用 Docker。
 5. `env` 可以设置这一步的环境变量，这一步设置的变量不会继承到下一步。刚才设置的私钥可以通过 `$` 获取到，具体见[文档](https://help.github.com/en/articles/virtual-environments-for-github-actions)。另外直接将密钥 echo 出来会被打码 :)
-6. Git 配置请更改为自己的。
-7. 由于我的博客源仓库配置了Submodule，如果没有配置的请直接删除step name为clone的步骤
+6. 在网页上保存私钥很可能会把 key 存成 CR-LF 换行模式的，而私钥文件要求 LF 模式，要用 `tr -d '\r'` 去掉回车符。
+7. Git 配置请更改为自己的。
+8. 由于我的博客源仓库配置了Submodule，如果没有配置的请直接删除step name为clone的步骤
 
 {% endnote %}
 
