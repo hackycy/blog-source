@@ -1,27 +1,22 @@
-on:
-  push: 
-    branches: 
-      - master
-
 name: Deploy
 
+on: push
 jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
     steps:
-    - name: Clean
-      uses: heowc/action-hexo@master
-      with:
-        args: 'clean'
-    - name: Generate
-      uses: heowc/action-hexo@master
-      with:
-        args: 'generate'
-    - name: Deploy
-      uses: heowc/action-hexo@master
-      env:
-        EMAIL: ''
-        NAME: ''
-      with:
-        args: 'deploy'
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Node 
+        uses: actions/setup-node@v1
+        with:
+          node-version: '10.x'
+      - name: NPM
+        run: npm install
+      - name: Clean
+        run: ./node_modules/.bin/hexo clean
+      - name: Generate
+        run: ./node_modules/.bin/hexo generate
+      - name: Deploy
+        run: ./node_modules/.bin/hexo deploy
