@@ -1,6 +1,10 @@
 name: Deploy
 
-on: push
+on:
+  push:
+    branches:    
+      - master
+
 jobs:
   build:
     name: Build
@@ -12,6 +16,18 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '10.x'
+      - name: prepare build env
+        env:
+          ACTION_DEPLOY_KEY: ${{ secrets.ACTION_DEPLOY_KEY }}
+        run: |
+          # set up private key for deploy
+          mkdir -p ~/.ssh/
+          echo "$ACTION_DEPLOY_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          # set git infomation
+          git config --global user.name 'hackycy'
+          git config --global user.email 'qa894178522@qq.com'
       - name: clone
         run: git clone https://github.com/hackycy/hackycy.github.io.git .deploy_git
       - name: NPM
