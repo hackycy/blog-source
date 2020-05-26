@@ -13,15 +13,15 @@ jobs:
     - name: Clean
       uses: heowc/action-hexo@master
       with:
-        args: clean
+        args: 'clean'
     - name: Generate
       uses: heowc/action-hexo@master
       with:
-        args: generate
+        args: 'generate'
     - name: Deploy
       uses: heowc/action-hexo@master
       env:
         EMAIL: ''
         NAME: ''
       with:
-        args: deploy
+        args: 'deploy'
