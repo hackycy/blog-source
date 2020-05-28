@@ -27,7 +27,7 @@ categories:
 module.exports = app => {
   const { router, controller } = app;
   router.get('/', controller.home.index);
-  router.post('/download', controller.home.deal);
+  router.get('/download', controller.home.deal);
 };
 ```
 
@@ -63,7 +63,7 @@ class HomeController extends Controller {
     if (!fs.existsSync(dirPath)) {
       fs.mkdirSync(dirPath);
     }
-    // 打包
+    // 打包到egg-static的目录下，也可以是其他目录，有写入权限文件目录即可，后续读取
     const zip = new jszip();
     zip.file('test.txt', 'detail');
     zip.folder('img');
@@ -96,3 +96,5 @@ module.exports = HomeController;
 # 参考资料
 
 https://github.com/eggjs/egg/issues/948
+
+https://www.jianshu.com/p/2689a38cf643
