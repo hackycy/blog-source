@@ -750,7 +750,7 @@ override func observeValue(forKeyPath keyPath: String?, of object: Any?, change:
   if keyPath == "estimatedProgress" {
     self.progress.setProgress(Float(self.webview.estimatedProgress), animated: true)
   } else if keyPath == "title" {
-    self.navigationItem.title = self.webview.title
+    self.navigationController?.title = self.webview.title
   } else {
     super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
   }
@@ -761,13 +761,13 @@ override func observeValue(forKeyPath keyPath: String?, of object: Any?, change:
 
 ``` swift
 - (void)webView:(WKWebView *)webView didStartProvisionalNavigation:(WKNavigation *)navigation {
-//    [self.progressView setHidden:YES];
-    [self.view addSubview:self.progress];
+    [self.progressView setHidden:NO];
 }
+
 //导航完成时调用。
 - (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation {
-    [self.progressView removeFromSuperview];
     self.progress.progress = 0.0;
+  	[self.progressView setHidden:YES];
 }
 ```
 
@@ -835,11 +835,305 @@ func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigatio
 >
 > 注意：必需要在真机上测试。
 
-# 资料参考
+# 仿微信WebView
 
-**demo已上传github**：https://github.com/hackycy/WKWebViewDemo
+运行效果：
+
+![image](https://user-images.githubusercontent.com/26972260/83226604-eb2cfa00-a1b4-11ea-85b3-36d8909c4488.png)
+
+实现代码：
+
+``` swift
+//
+//  CommonWebViewController.swift
+//  xianqi
+//
+//  Created by yzy on 2020/4/17.
+//
+
+import UIKit
+import WebKit
+
+class CommonWebViewController: UIViewController, WKUIDelegate, WKNavigationDelegate, UIScrollViewDelegate {
+    
+    /// 加载的链接
+    var requestUrl: String? {
+        didSet {
+            self.webview.load(URLRequest(url: URL(string: self.requestUrl!)!))
+        }
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        //四周均不延伸，以免出现遮挡
+        self.edgesForExtendedLayout = []
+        self.initWebView()
+        self.initProgressView()
+        self.setupToolbarItems()
+        // 加载URL
+        self.requestUrl = "https://www.baidu.com"
+    }
+    
+    // MARK: toolbar
+        
+    lazy var goBackItem: UIBarButtonItem = {
+        let item: UIBarButtonItem = UIBarButtonItem(image: UIImage(named: "icon_left_arrow"), style: .done, target: self, action: #selector(CommonWebViewController.goBack))
+        item.tintColor = UIColor.black
+        return item
+    }()
+    
+    lazy var goForwardItem: UIBarButtonItem = {
+        let item: UIBarButtonItem = UIBarButtonItem(image: UIImage(named: "icon_right_arrow"), style: .done, target: self, action: #selector(CommonWebViewController.goForword))
+        item.tintColor = UIColor.black
+        return item
+    }()
+    
+    lazy var flexibleItem: UIBarButtonItem = {
+        return UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+    }()
+    
+    @objc func goBack() {
+        if self.webview.canGoBack {
+            webview.goBack()
+        }
+    }
+    
+    @objc func goForword() {
+        if self.webview.canGoForward {
+            webview.goForward()
+        }
+    }
+    
+    func setupToolbarItems() {
+        self.navigationController?.toolbar.isTranslucent = false
+        self.toolbarItems = [flexibleItem, goBackItem, flexibleItem, goForwardItem, flexibleItem]
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        // 当Push进来时如果页面没有显示NavBar，则WebView手动显示
+        if self.navigationController?.navigationBar.isHidden ?? false {
+            self.navigationController?.setNavigationBarHidden(false, animated: true)
+        }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        hiddenToolbar()
+    }
+    
+    func hiddenToolbar() {
+        self.navigationController?.setToolbarHidden(true, animated: true)
+    }
+    
+    func visibleToolbar() {
+        if self.navigationController != nil {
+            if self.navigationController!.isToolbarHidden {
+                self.navigationController?.setToolbarHidden(false, animated: true)
+                self.goForwardItem.isEnabled = self.webview.canGoForward
+                self.goBackItem.isEnabled = self.webview.canGoBack
+            }
+        }
+    }
+    
+    // MARK: webview相关
+    
+    lazy var webview: WKWebView = {
+        let wv: WKWebView = WKWebView()
+        // normal setting
+        wv.uiDelegate = self
+        wv.navigationDelegate = self
+        return wv
+    }()
+    
+    lazy var progressView: UIProgressView = {
+        let view: UIProgressView = UIProgressView(progressViewStyle: .bar)
+        view.trackTintColor = UIColor.gray
+        view.progressTintColor = UIColor.green.withAlphaComponent(0.55)
+        return view
+    }()
+    
+    func initWebView() {
+        // add view
+        self.view.addSubview(self.webview)
+        // add constraint
+        self.webview.translatesAutoresizingMaskIntoConstraints = false
+        if #available(iOS 11.0, *) {
+            self.view.addConstraint(NSLayoutConstraint(item: self.webview, attribute: .top, relatedBy: .equal, toItem: self.view.safeAreaLayoutGuide, attribute: .top, multiplier: 1.0, constant: 0))
+            self.view.addConstraint(NSLayoutConstraint(item: self.webview, attribute: .bottom, relatedBy: .equal, toItem: self.view.safeAreaLayoutGuide, attribute: .bottom, multiplier: 1.0, constant: 0))
+        } else {
+            // Fallback on earlier versions
+            self.view.addConstraint(NSLayoutConstraint(item: self.webview, attribute: .top, relatedBy: .equal, toItem: self.view, attribute: .top, multiplier: 1.0, constant: 0))
+            self.view.addConstraint(NSLayoutConstraint(item: self.webview, attribute: .bottom, relatedBy: .equal, toItem: self.view, attribute: .bottom, multiplier: 1.0, constant: 0))
+        }
+        self.view.addConstraint(NSLayoutConstraint(item: self.webview, attribute: .left, relatedBy: .equal, toItem: self.view, attribute: .left, multiplier: 1.0, constant: 0))
+        self.view.addConstraint(NSLayoutConstraint(item: self.webview, attribute: .right, relatedBy: .equal, toItem: self.view, attribute: .right, multiplier: 1.0, constant: 0))
+        // 监听进度事件
+        self.webview.addObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), options: .new, context: nil)
+        // 监听网页标题
+        self.webview.addObserver(self, forKeyPath: #keyPath(WKWebView.title), options: .new, context: nil)
+        // 监听前进后退
+        self.webview.addObserver(self, forKeyPath: #keyPath(WKWebView.canGoForward), options: .new, context: nil)
+        self.webview.addObserver(self, forKeyPath: #keyPath(WKWebView.canGoBack), options: .new, context: nil)
+        // 滚动监听
+        self.webview.scrollView.delegate = self
+        // 设置UA
+        self.webview.evaluateJavaScript("navigator.userAgent") { (oldAgent: Any?, error: Error?) in
+            if error == nil {
+                //oldAgent = [NSString stringWithFormat:@"Mozilla/5.0 (%@; CPU iPhone OS %@ like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148", [[UIDevice currentDevice] model], [[[UIDevice currentDevice] systemVersion] stringByReplacingOccurrencesOfString:@"." withString:@"_"]];
+                let uaStr: String = oldAgent as? String ?? "Mozilla/5.0 (\(UIDevice.current.model); CPU iPhone OS \(UIDevice.current.systemVersion) like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148"
+                // 保存至本地
+                UserDefaults.standard.set(uaStr, forKey: "USER_AGENT")
+                // 获取app信息
+                let infoDic = Bundle.main.infoDictionary
+                // 获取App的版本号
+                let appVersion = infoDic?["CFBundleShortVersionString"]
+                // 获取App的build版本
+                let appBuildVersion = infoDic?["CFBundleVersion"]
+                // 真实拼接 UA
+                let realUAStr = "\(uaStr)#xianqi#\(appVersion ?? 0)#\(appBuildVersion ?? 0)"
+                self.webview.customUserAgent = realUAStr
+            }
+            
+        }
+    }
+    
+    // 手势拖动时控制Toolbar显示和隐藏 
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if self.webview.backForwardList.backList.count <= 0 && self.webview.backForwardList.forwardList.count <= 0 {
+            return
+        }
+        let vel = scrollView.panGestureRecognizer.velocity(in: scrollView)
+        if vel.y < -8 {
+            // 向上拖动
+            hiddenToolbar()
+        } else if vel.y > 8 {
+            // 向下拖动
+            visibleToolbar()
+        }
+    }
+    
+    /// 监听
+    /// - Parameters:
+    ///   - keyPath: keyPath description
+    ///   - object: object description
+    ///   - change: change description
+    ///   - context: context description
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if keyPath == #keyPath(WKWebView.estimatedProgress) {
+            self.showProgressView(progress: Float(self.webview.estimatedProgress))
+        } else if keyPath == #keyPath(WKWebView.title) {
+            self.observeWebTitle(title: self.webview.title)
+            // 控制显示Toolbar
+            if self.webview.backForwardList.backList.count > 0 || self.webview.backForwardList.forwardList.count > 0 {
+                visibleToolbar()
+            }
+        } else if keyPath == #keyPath(WKWebView.canGoForward) {
+            self.goForwardItem.isEnabled = self.webview.canGoForward
+        } else if keyPath == #keyPath(WKWebView.canGoBack) {
+            self.goBackItem.isEnabled = self.webview.canGoBack
+        } else {
+            return super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
+        }
+    }
+    
+    /// 用于方便子类重写
+    /// - Parameter title: webview的标题
+    func observeWebTitle(title: String?) {
+        self.navigationItem.title = title
+    }
+    
+    func initProgressView() {
+        // layout
+        self.view.addSubview(self.progressView)
+        // add constraint
+        self.progressView.translatesAutoresizingMaskIntoConstraints = false
+        if #available(iOS 11.0, *) {
+            self.view.addConstraint(NSLayoutConstraint(item: self.progressView, attribute: .top, relatedBy: .equal, toItem: self.view.safeAreaLayoutGuide, attribute: .top, multiplier: 1.0, constant: 0))
+        } else {
+            // Fallback on earlier versions
+            self.view.addConstraint(NSLayoutConstraint(item: self.progressView, attribute: .top, relatedBy: .equal, toItem: self.view, attribute: .top, multiplier: 1.0, constant: 0))
+        }
+        // 设置宽度
+        self.view.addConstraint(NSLayoutConstraint(item: self.progressView, attribute: .left, relatedBy: .equal, toItem: self.view, attribute: .left, multiplier: 1.0, constant: 0))
+        self.view.addConstraint(NSLayoutConstraint(item: self.progressView, attribute: .right, relatedBy: .equal, toItem: self.view, attribute: .right, multiplier: 1.0, constant: 0))
+        // 设置高度
+        self.progressView.addConstraint(NSLayoutConstraint(item: self.progressView, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1.0, constant: 2))
+    }
+    
+    func showProgressView(progress: Float) {
+        if self.progressView.isHidden {
+            self.progressView.isHidden = false
+        }
+        self.progressView.setProgress(progress, animated: true)
+        if progress == 1.0 {
+            self.hideProgressView()
+        }
+    }
+    
+    func hideProgressView() {
+        self.progressView.isHidden = true
+        self.progressView.setProgress(0.1, animated: false)
+    }
+    
+    // MARK: WKUIDelegate
+    
+    func webView(_ webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping () -> Void) {
+        let alert = UIAlertController(title: "提示", message: message, preferredStyle: UIAlertController.Style.alert)
+        let sure = UIAlertAction(title: "确定", style: UIAlertAction.Style.default) { (action: UIAlertAction) in
+          completionHandler()
+        }
+        alert.addAction(sure)
+        self.present(alert, animated: true)
+    }
+    
+    // MARK: WKNavigationDelegate
+
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        self.hideProgressView()
+    }
+    
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        let scheme = navigationAction.request.url?.scheme
+        // about 用于解决LayUI框架显示问题
+        if scheme == "http" || scheme == "https" || scheme == "file" || scheme == "about" {
+            decisionHandler(.allow)
+            return
+        }
+        //否则例如scheme为taobao、alipay等则根据第三方sdk在网页中配置url，这里是都可以跳转
+        if UIApplication.shared.canOpenURL(navigationAction.request.url!) {
+            //取消导航，打开APP
+            UIApplication.shared.openURL(navigationAction.request.url!)
+            // 取消
+            decisionHandler(.cancel)
+            return
+        }
+        decisionHandler(.allow)
+    }
+    
+    deinit {
+        self.webview.removeObserver(self, forKeyPath: "estimatedProgress")
+        self.webview.removeObserver(self, forKeyPath: "title")
+        self.webview.removeObserver(self, forKeyPath: "url")
+    }
+    
+}
+```
+
+> 包括了设置UA的方式，至于左侧的关闭按钮和右侧的更多按钮则可以自己实现美化。这里不多实现了。
+
+# 资料参考
 
 https://developer.apple.com/documentation/webkit/wkwebview
 
 https://kangzubin.com/wkwebview-link/
 
+https://www.jianshu.com/p/bf2008d80e2d
+
+https://blog.csdn.net/kmonarch/article/details/83585795
+
+https://www.jianshu.com/p/0f825df61037
