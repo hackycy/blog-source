@@ -835,6 +835,10 @@ func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigatio
 >
 > 注意：必需要在真机上测试。
 
+##  WKWebView的3Dtouch预览功能
+
+**将WKWebView的`allowsLinkPreview`属性设置`NO`即可关闭**
+
 # 仿微信WebView
 
 运行效果：
