@@ -13,7 +13,7 @@ categories:
 
 <!-- more -->
 
-![image](https://user-images.githubusercontent.com/26972260/83236893-dc4f4300-a1c6-11ea-9103-5135fdf7211a.png)
+![](https://github.static.si-yee.com/posts/SolvetheproblemofimagedisplayfailureonGitHubwebpage/20200604140631.png)
 
 主要报错是`Failed to load resource: net::ERR_CERT_COMMON_NAME_INVALID`以及`Failed to load resource: net::ERR_CONNECTION_RESET`
 
@@ -31,15 +31,15 @@ categories:
 
 打开`github`任意未显示图片的网页，使用元素选择器（`Ctrl+Shift+C`）放在显示不了的图片上，或者在无法显示的图片上右键-检查元素，定位到该图片的标签，那么你得到了它的URL，叫做`src`属性。
 
-![image](https://user-images.githubusercontent.com/26972260/83237027-17ea0d00-a1c7-11ea-9b4e-ad3eaaa3e9e1.png)
+![](https://github.static.si-yee.com/posts/SolvetheproblemofimagedisplayfailureonGitHubwebpage/20200604140727.png)
 
 将URL复制出来后，打开[IPAddress.com](https://www.ipaddress.com/)这个网站，搜索它的域名:`avatars2.githubusercontent.com`
 
-![image](https://user-images.githubusercontent.com/26972260/83237520-9e9eea00-a1c7-11ea-9ac5-e333e23d8faa.png)
+![](https://github.static.si-yee.com/posts/SolvetheproblemofimagedisplayfailureonGitHubwebpage/20200604140757.png)
 
 搜索后会看到该域名的信息和`IP`地址：
 
-![image](https://user-images.githubusercontent.com/26972260/83237201-639cb680-a1c7-11ea-99a5-7c9297fa36ff.png)
+![](https://github.static.si-yee.com/posts/SolvetheproblemofimagedisplayfailureonGitHubwebpage/20200604140836.png)
 
 当前该域名的IP是：199.232.68.133，那么我们就可以使这个**IP**和**域名**映射起来。
 

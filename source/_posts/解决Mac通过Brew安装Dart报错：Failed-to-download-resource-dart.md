@@ -15,11 +15,11 @@ categories:
 
 首先是dart官网推荐使用brew命令安装dart，如下图：
 
-![](https://user-images.githubusercontent.com/26972260/83595208-e6d95600-a593-11ea-86d0-36e06d1a7c49.png)
+![](https://github.static.si-yee.com/posts/fixmacinstalldart/20200604141048.png)
 
 但是出现了以下的错误：
 
-![](https://user-images.githubusercontent.com/26972260/83594943-2a7f9000-a593-11ea-9fd4-99d845819711.png)
+![](https://github.static.si-yee.com/posts/fixmacinstalldart/20200604141008.png)
 
 详细报错如下：
 

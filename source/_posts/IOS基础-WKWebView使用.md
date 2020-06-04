@@ -843,7 +843,7 @@ func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigatio
 
 运行效果：
 
-![image](https://user-images.githubusercontent.com/26972260/83226604-eb2cfa00-a1b4-11ea-85b3-36d8909c4488.png)
+![](https://github.static.si-yee.com/IOSWKWebView/20200604140255.png)
 
 实现代码：
 
