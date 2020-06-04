@@ -22,7 +22,7 @@ categories:
 
 按照下图配置虚拟机的网络
 
-![image](https://user-images.githubusercontent.com/26972260/82634776-400ac680-9c31-11ea-86d2-1ca66c615e5a.png)
+![](https://github.static.si-yee.com/posts/VirtualBox中解决安装CentOS7后无法上网问题-20200604134142.png)
 
 其中，连接方式选择桥接网卡、界面名称选择你主机上网用的无线网卡、控制芯片选择桌面、混杂模式选择拒绝、勾选接入网络。
 
@@ -36,7 +36,7 @@ categories:
 $ vi /etc/sysconfig/network-scripts/ifcfg-enp0s3
 ```
 
-![image](https://user-images.githubusercontent.com/26972260/82634922-9d9f1300-9c31-11ea-98f7-5ad6dd5ac3bf.png)
+![](https://github.static.si-yee.com/posts/VirtualBox中解决安装CentOS7后无法上网问题-20200604134232.png)
 
 # 重启网络服务
 

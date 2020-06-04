@@ -24,7 +24,7 @@ categories:
 
 但是更好的方法是通过添加条件编译来将这些语句排除在 Release 版本外。在 Xcode 的 Build Setting 中，在 **Other Swift flags** 的 Debug 栏中加入 `-D DEBUG` 即可加入一个编译标识。
 
-![image](https://user-images.githubusercontent.com/26972260/82534186-4dfc1100-9b77-11ea-891e-f5403fdb5960.png)
+![](https://github.static.si-yee.com/posts/iOS之日志打印优化-20200604133855.png)
 
 之后我们就可以通过将 `print` 或者 `debugPrint` 包装一下：
 

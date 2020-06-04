@@ -42,7 +42,7 @@ $ cat github-actions-deploy.pub
 
 然后在 Github Pages 的仓库，**Settings -> Deploy keys** 添加刚刚生成的公钥，名称随意，但要勾选 **Allow write access**。
 
-![image](https://user-images.githubusercontent.com/26972260/82867966-592bb400-9f5e-11ea-8601-22368fbe956a.png)
+![](https://github.static.si-yee.com/posts/Github Action 自动化部署Hexo-20200604134453.png)
 
 # 添加Github Action
 
@@ -114,13 +114,13 @@ jobs:
 
 每当你写完博客是直接提交到源仓库即可自动触发构建。会配合Action自动发布到Github Page仓库。
 
-![image](https://user-images.githubusercontent.com/26972260/82869130-5336d280-9f60-11ea-8226-f548c61d122d.png)
+![](https://github.static.si-yee.com/posts/Github Action 自动化部署Hexo-20200604134653.png)
 
 # 注意事项
 
 如果博客中配置了主题，请注释掉主题下的.gitignore的一些配置，例如本人使用的Next主题
 
-![image](https://user-images.githubusercontent.com/26972260/82867335-406ece80-9f5d-11ea-88fd-64ee69618acc.png)
+![](https://github.static.si-yee.com/posts/Github Action 自动化部署Hexo-20200604134730.png)
 
 以及配合主题安装的第三方插件，有一些插件通过Git clone安装时不会上传到源文件仓库，需要手动删除掉插件目录下的.git文件夹。
 
