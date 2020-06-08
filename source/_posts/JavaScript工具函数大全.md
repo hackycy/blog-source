@@ -10,6 +10,668 @@ categories:
 抄录一些JavaScript工具函数大全
 <!-- more -->
 
+# 检测数据是不是除了symbol外的原始数据
+
+``` javascript
+function isStatic(value) {
+    return(
+        typeof value === 'string' ||
+        typeof value === 'number' ||
+        typeof value === 'boolean' ||
+        typeof value === 'undefined' ||
+        value === null
+    )
+}
+```
+
+# 检测数据是不是原始数据
+
+``` javascript
+function isPrimitive(value) {
+    return isStatic(value) || typeof value === 'symbol'
+}
+```
+
+# 判断数据是不是引用类型的数据 (例如： arrays, functions, objects, regexes, new Number(0),以及 new String(''))
+
+``` javascript
+function isObject(value) {
+      let type = typeof value;
+      return value != null && (type == 'object' || type == 'function');
+}
+```
+
+# 检查 value 是否是 类对象。 如果一个值是类对象，那么它不应该是 null，而且 typeof 后的结果是 "object"
+
+``` javascript
+function isObjectLike(value) {
+      return value != null && typeof value == 'object';
+}
+```
+
+# 获取数据类型，返回结果为 Number、String、Object、Array等
+
+``` javascript
+function getRawType(value) {
+    return Object.prototype.toString.call(value).slice(8, -1)
+}
+//getoRawType([]) ==> Array
+```
+
+# 判断数据是不是Object类型的数据
+
+``` javascript
+function isPlainObject(obj) {
+    return Object.prototype.toString.call(obj) === '[object Object]'
+}
+```
+
+# 判断 value 是不是浏览器内置函数
+
+内置函数toString后的主体代码块为 [native code] ，而非内置函数则为相关代码，所以非内置函数可以进行拷贝(toString后掐头去尾再由Function转)
+
+``` javascript
+function isNative(value) {
+    return typeof value === 'function' && /native code/.test(value.toString())
+}
+```
+
+# 检查 value 是否为有效的类数组长度
+
+``` javascript
+function isLength(value) {
+      return typeof value == 'number' && value > -1 && value % 1 == 0 && value <= Number.MAX_SAFE_INTEGER;
+}
+```
+
+# 检查 value 是否是类数组
+
+如果一个值被认为是类数组，那么它不是一个函数，并且value.length是个整数，大于等于 0，小于或等于 Number.MAX_SAFE_INTEGER。这里字符串也将被当作类数组。
+
+``` javascript
+function isArrayLike(value) {
+      return value != null && isLength(value.length) && !isFunction(value);
+}
+```
+
+# 检查 value 是否为空
+
+如果是null，直接返回true；如果是类数组，判断数据长度；如果是Object对象，判断是否具有属性；如果是其他数据，直接返回false(也可改为返回true)
+
+``` javascript
+function isEmpty(value) {
+    if (value == null) {
+        return true;
+    }
+    if (isArrayLike(value)) {
+        return !value.length;
+    }else if(isPlainObject(value)){
+          for (let key in value) {
+            if (hasOwnProperty.call(value, key)) {
+              return false;
+            }
+        }
+    }
+    return false;
+}
+```
+
+# 记忆函数：缓存函数的运算结果
+
+``` javascript
+function cached(fn) {
+    let cache = Object.create(null);
+    return function cachedFn(str) {
+        let hit = cache[str];
+        return hit || (cache[str] = fn(str))
+    }
+}
+```
+
+# 横线转驼峰命名
+
+``` javascript
+let camelizeRE = /-(\w)/g;
+function camelize(str) {
+    return str.replace(camelizeRE, function(_, c) {
+        return c ? c.toUpperCase() : '';
+    })
+}
+//ab-cd-ef ==> abCdEf
+//使用记忆函数
+let _camelize = cached(camelize)
+```
+
+# 驼峰命名转横线命名：拆分字符串，使用 - 相连，并且转换为小写
+
+``` javascript
+let hyphenateRE = /\B([A-Z])/g;
+function hyphenate(str){
+    return str.replace(hyphenateRE, '-$1').toLowerCase()
+}
+//abCd ==> ab-cd
+//使用记忆函数
+let _hyphenate = cached(hyphenate);
+```
+
+# 字符串首位大写
+
+``` javascript
+function capitalize(str){
+    return str.charAt(0).toUpperCase() + str.slice(1)
+}
+// abc ==> Abc
+//使用记忆函数
+let _capitalize = cached(capitalize)
+```
+
+# 将属性混合到目标对象中
+
+``` javascript
+function extend(to, _from) {
+    for(let key in _from) {
+        to[key] = _from[key];
+    }
+    return to
+}
+```
+
+# 对象属性复制，浅拷贝
+
+``` javascript
+Object.assign = Object.assign || function(){
+    if(arguments.length == 0) throw new TypeError('Cannot convert undefined or null to object');
+    
+    let target = arguments[0],
+        args = Array.prototype.slice.call(arguments, 1),
+        key
+    args.forEach(function(item){
+        for(key in item){
+            item.hasOwnProperty(key) && ( target[key] = item[key] )
+        }
+    })
+    return target
+}
+```
+
+使用`Object.assign`可以浅克隆一个对象：
+
+``` javascript
+let clone = Object.assign({}, target)
+```
+
+简单的深克隆可以使用`JSON.parse()`和`JSON.stringify()`，这两个api是解析json数据的，所以只能解析除symbol外的原始类型及数组和对象
+
+``` javascript
+let clone = JSON.parse( JSON.stringify(target) )
+```
+
+# 克隆数据，可深度克隆
+
+这里列出了原始类型，时间、正则、错误、数组、对象的克隆规则，其他的可自行补充
+
+``` javascript
+function clone(value, deep){
+    if(isPrimitive(value)){
+        return value
+    }
+    
+    if (isArrayLike(value)) { //是类数组
+        value = Array.prototype.slice.call(value)
+        return value.map(item => deep ? clone(item, deep) : item)
+       }else if(isPlainObject(value)){ //是对象
+           let target = {}, key;
+          for (key in value) {
+            value.hasOwnProperty(key) && ( target[key] = deep ? clone(value[key], deep) : value[key] )
+        }
+    }
+    
+    let type = getRawType(value)
+    
+    switch(type){
+        case 'Date':
+        case 'RegExp': 
+        case 'Error': value = new window[type](value); break;
+    }
+    return value
+}
+```
+
+# 识别各种浏览器及平台
+
+``` javascript
+//运行环境是浏览器
+let inBrowser = typeof window !== 'undefined';
+//运行环境是微信
+let inWeex = typeof WXEnvironment !== 'undefined' && !!WXEnvironment.platform;
+let weexPlatform = inWeex && WXEnvironment.platform.toLowerCase();
+//浏览器 UA 判断
+let UA = inBrowser && window.navigator.userAgent.toLowerCase();
+let isIE = UA && /msie|trident/.test(UA);
+let isIE9 = UA && UA.indexOf('msie 9.0') > 0;
+let isEdge = UA && UA.indexOf('edge/') > 0;
+let isAndroid = (UA && UA.indexOf('android') > 0) || (weexPlatform === 'android');
+let isIOS = (UA && /iphone|ipad|ipod|ios/.test(UA)) || (weexPlatform === 'ios');
+let isChrome = UA && /chrome\/\d+/.test(UA) && !isEdge;
+```
+
+# 获取浏览器信息
+
+``` javascript
+function getExplorerInfo() {
+    let t = navigator.userAgent.toLowerCase();
+    return 0 <= t.indexOf("msie") ? { //ie < 11
+        type: "IE",
+        version: Number(t.match(/msie ([\d]+)/)[1])
+    } : !!t.match(/trident\/.+?rv:(([\d.]+))/) ? { // ie 11
+        type: "IE",
+        version: 11
+    } : 0 <= t.indexOf("edge") ? {
+        type: "Edge",
+        version: Number(t.match(/edge\/([\d]+)/)[1])
+    } : 0 <= t.indexOf("firefox") ? {
+        type: "Firefox",
+        version: Number(t.match(/firefox\/([\d]+)/)[1])
+    } : 0 <= t.indexOf("chrome") ? {
+        type: "Chrome",
+        version: Number(t.match(/chrome\/([\d]+)/)[1])
+    } : 0 <= t.indexOf("opera") ? {
+        type: "Opera",
+        version: Number(t.match(/opera.([\d]+)/)[1])
+    } : 0 <= t.indexOf("Safari") ? {
+        type: "Safari",
+        version: Number(t.match(/version\/([\d]+)/)[1])
+    } : {
+        type: t,
+        version: -1
+    }
+}
+```
+
+# 检测是否为PC端浏览器模式
+
+``` javascript
+function isPCBroswer() {
+    let e = navigator.userAgent.toLowerCase()
+        , t = "ipad" == e.match(/ipad/i)
+        , i = "iphone" == e.match(/iphone/i)
+        , r = "midp" == e.match(/midp/i)
+        , n = "rv:1.2.3.4" == e.match(/rv:1.2.3.4/i)
+        , a = "ucweb" == e.match(/ucweb/i)
+        , o = "android" == e.match(/android/i)
+        , s = "windows ce" == e.match(/windows ce/i)
+        , l = "windows mobile" == e.match(/windows mobile/i);
+    return !(t || i || r || n || a || o || s || l)
+}
+```
+
+# 数组去重，返回一个新数组
+
+``` javascript
+function unique(arr){
+    if(!isArrayLink(arr)){ //不是类数组对象
+        return arr
+    }
+    let result = []
+    let objarr = []
+    let obj = Object.create(null)
+    
+    arr.forEach(item => {
+        if(isStatic(item)){//是除了symbol外的原始数据
+            let key = item + '_' + getRawType(item);
+            if(!obj[key]){
+                obj[key] = true
+                result.push(item)
+            }
+        }else{//引用类型及symbol
+            if(!objarr.includes(item)){
+                objarr.push(item)
+                result.push(item)
+            }
+        }
+    })
+    
+    return resulte
+}
+```
+
+# 生成一个重复的字符串，有n个str组成，可修改为填充为数组等
+
+``` javascript
+function repeat(str, n) {
+    let res = '';
+    while(n) {
+        if(n % 2 === 1) {
+            res += str;
+        }
+        if(n > 1) {
+            str += str;
+        }
+        n >>= 1;
+    }
+    return res
+};
+//repeat('123',3) ==> 123123123
+```
+
+# 格式化时间
+
+``` javascript
+function dateFormater(formater, t){
+    let date = t ? new Date(t) : new Date(),
+        Y = date.getFullYear() + '',
+        M = date.getMonth() + 1,
+        D = date.getDate(),
+        H = date.getHours(),
+        m = date.getMinutes(),
+        s = date.getSeconds();
+    return formater.replace(/YYYY|yyyy/g,Y)
+        .replace(/YY|yy/g,Y.substr(2,2))
+        .replace(/MM/g,(M<10?'0':'') + M)
+        .replace(/DD/g,(D<10?'0':'') + D)
+        .replace(/HH|hh/g,(H<10?'0':'') + H)
+        .replace(/mm/g,(m<10?'0':'') + m)
+        .replace(/ss/g,(s<10?'0':'') + s)
+}
+// dateFormater('YYYY-MM-DD HH:mm', t) ==> 2019-06-26 18:30
+// dateFormater('YYYYMMDDHHmm', t) ==> 201906261830
+```
+
+# dateStrForma：将指定字符串由一种时间格式转化为另一种
+
+from的格式应对应str的位置
+
+``` javascript
+
+function dateStrForma(str, from, to){
+    //'20190626' 'YYYYMMDD' 'YYYY年MM月DD日'
+    str += ''
+    let Y = ''
+    if(~(Y = from.indexOf('YYYY'))){
+        Y = str.substr(Y, 4)
+        to = to.replace(/YYYY|yyyy/g,Y)
+    }else if(~(Y = from.indexOf('YY'))){
+        Y = str.substr(Y, 2)
+        to = to.replace(/YY|yy/g,Y)
+    }
+
+    let k,i
+    ['M','D','H','h','m','s'].forEach(s =>{
+        i = from.indexOf(s+s)
+        k = ~i ? str.substr(i, 2) : ''
+        to = to.replace(s+s, k)
+    })
+    return to
+}
+// dateStrForma('20190626', 'YYYYMMDD', 'YYYY年MM月DD日') ==> 2019年06月26日
+// dateStrForma('121220190626', '----YYYYMMDD', 'YYYY年MM月DD日') ==> 2019年06月26日
+// dateStrForma('2019年06月26日', 'YYYY年MM月DD日', 'YYYYMMDD') ==> 20190626
+
+// 一般的也可以使用正则来实现
+//'2019年06月26日'.replace(/(\d{4})年(\d{2})月(\d{2})日/, '$1-$2-$3') ==> 2019-06-26
+```
+
+# 根据字符串路径获取对象属性 : 'obj[0].count'
+
+``` javascript
+function getPropByPath(obj, path, strict) {
+      let tempObj = obj;
+      path = path.replace(/\[(\w+)\]/g, '.$1'); //将[0]转化为.0
+      path = path.replace(/^\./, ''); //去除开头的.
+
+      let keyArr = path.split('.'); //根据.切割
+      let i = 0;
+      for (let len = keyArr.length; i < len - 1; ++i) {
+        if (!tempObj && !strict) break;
+        let key = keyArr[i];
+        if (key in tempObj) {
+            tempObj = tempObj[key];
+        } else {
+            if (strict) {//开启严格模式，没找到对应key值，抛出错误
+                throw new Error('please transfer a valid prop path to form item!');
+            }
+            break;
+        }
+      }
+      return {
+        o: tempObj, //原始数据
+        k: keyArr[i], //key值
+        v: tempObj ? tempObj[keyArr[i]] : null // key值对应的值
+      };
+};
+```
+
+# 获取Url参数，返回一个对象
+
+``` javascript
+function GetUrlParam(){
+    let url = document.location.toString();
+    let arrObj = url.split("?");
+    let params = Object.create(null)
+    if (arrObj.length > 1){
+        arrObj = arrObj[1].split("&");
+        arrObj.forEach(item=>{
+            item = item.split("=");
+            params[item[0]] = item[1]
+        })
+    }
+    return params;
+}
+// ?a=1&b=2&c=3 ==> {a: "1", b: "2", c: "3"}
+```
+
+# base64数据导出文件，文件下载
+
+``` javascript
+
+function downloadFile(filename, data){
+    let DownloadLink = document.createElement('a');
+
+    if ( DownloadLink ){
+        document.body.appendChild(DownloadLink);
+        DownloadLink.style = 'display: none';
+        DownloadLink.download = filename;
+        DownloadLink.href = data;
+
+        if ( document.createEvent ){
+            let DownloadEvt = document.createEvent('MouseEvents');
+
+            DownloadEvt.initEvent('click', true, false);
+            DownloadLink.dispatchEvent(DownloadEvt);
+        }
+        else if ( document.createEventObject )
+            DownloadLink.fireEvent('onclick');
+        else if (typeof DownloadLink.onclick == 'function' )
+            DownloadLink.onclick();
+
+        document.body.removeChild(DownloadLink);
+    }
+}
+```
+
+
+# 全屏
+
+
+``` javascript
+function toFullScreen(){
+    let elem = document.body;
+    elem.webkitRequestFullScreen
+    ? elem.webkitRequestFullScreen()
+    : elem.mozRequestFullScreen
+    ? elem.mozRequestFullScreen()
+    : elem.msRequestFullscreen
+    ? elem.msRequestFullscreen()
+    : elem.requestFullScreen
+    ? elem.requestFullScreen()
+    : alert("浏览器不支持全屏");
+}
+```
+
+# 退出全屏
+
+``` javascript
+function exitFullscreen(){
+    let elem = parent.document;
+    elem.webkitCancelFullScreen
+    ? elem.webkitCancelFullScreen()
+    : elem.mozCancelFullScreen
+    ? elem.mozCancelFullScreen()
+    : elem.cancelFullScreen
+    ? elem.cancelFullScreen()
+    : elem.msExitFullscreen
+    ? elem.msExitFullscreen()
+    : elem.exitFullscreen
+    ? elem.exitFullscreen()
+    : alert("切换失败,可尝试Esc退出");
+}
+```
+
+# window动画
+
+``` javascript
+window.requestAnimationFrame = window.requestAnimationFrame ||
+    window.webkitRequestAnimationFrame ||
+    window.mozRequestAnimationFrame ||
+    window.msRequestAnimationFrame ||
+    window.oRequestAnimationFrame ||
+    function (callback) {
+        //为了使setTimteout的尽可能的接近每秒60帧的效果
+        window.setTimeout(callback, 1000 / 60);
+    }
+    
+window.cancelAnimationFrame = window.cancelAnimationFrame ||
+    Window.webkitCancelAnimationFrame ||
+    window.mozCancelAnimationFrame ||
+    window.msCancelAnimationFrame ||
+    window.oCancelAnimationFrame ||
+    function (id) {
+        //为了使setTimteout的尽可能的接近每秒60帧的效果
+        window.clearTimeout(id);
+	}
+```
+
+# 检查数据是否是非数字值
+
+``` javascript
+function _isNaN(v){
+    return !(typeof v === 'string' || typeof v === 'number') || isNaN(v)
+}
+```
+
+# 返回一个lower - upper之间的随机数
+
+lower、upper无论正负与大小，但必须是非NaN的数据
+
+``` javascript
+function random(lower, upper){
+    lower = +lower || 0
+    upper = +upper || 0
+    return Math.random() * (upper - lower) + lower;
+}
+//random(0, 0.5) ==> 0.3567039135734613
+//random(2, 1) ===> 1.6718418553475423
+//random(-2, -1) ==> -1.4474325452361945
+```
+
+# 利用performance.timing进行性能分析
+
+``` javascript
+window.onload = function(){
+    setTimeout(function(){
+        let t = performance.timing
+        console.log('DNS查询耗时 ：' + (t.domainLookupEnd - t.domainLookupStart).toFixed(0))
+        console.log('TCP链接耗时 ：' + (t.connectEnd - t.connectStart).toFixed(0))
+        console.log('request请求耗时 ：' + (t.responseEnd - t.responseStart).toFixed(0))
+        console.log('解析dom树耗时 ：' + (t.domComplete - t.domInteractive).toFixed(0))
+        console.log('白屏时间 ：' + (t.responseStart - t.navigationStart).toFixed(0))
+        console.log('domready时间 ：' + (t.domContentLoadedEventEnd - t.navigationStart).toFixed(0))
+        console.log('onload时间 ：' + (t.loadEventEnd - t.navigationStart).toFixed(0))
+
+        if(t = performance.memory){
+            console.log('js内存使用占比 ：' + (t.usedJSHeapSize / t.totalJSHeapSize * 100).toFixed(2) + '%')
+        }
+    })
+}
+```
+
+# 禁止某些键盘事件
+
+``` javascript
+document.addEventListener('keydown', function(event){
+    return !(
+        112 == event.keyCode || //F1
+        123 == event.keyCode || //F12
+        event.ctrlKey && 82 == event.keyCode || //ctrl + R
+        event.ctrlKey && 78 == event.keyCode || //ctrl + N
+        event.shiftKey && 121 == event.keyCode || //shift + F10
+        event.altKey && 115 == event.keyCode || //alt + F4
+        "A" == event.srcElement.tagName && event.shiftKey //shift + 点击a标签
+    ) || (event.returnValue = false)
+});
+```
+
+# 禁止右键、选择、复制
+
+``` javascript
+['contextmenu', 'selectstart', 'copy'].forEach(function(ev){
+    document.addEventListener(ev, function(event){
+        return event.returnValue = false
+    })
+});
+```
+
+# 数组扁平化
+
+``` javascript
+function flattenDepth(array, depth = 1) {
+   let result = []
+   array.forEach(item => {
+     let d = depth
+     if (Array.isArray(item) && d > 0) {
+       result.push(...(flattenDepth(item, --d)))
+     } else {
+       result.push(item)
+     }
+  })
+  return result
+}
+
+console.log(flattenDepth([1, [2, [3, [4]], 5]])) // [ 1, 2, [ 3, [ 4 ] ], 5 ]
+console.log(flattenDepth([1, [2, [3, [4]], 5]], 2)) // [ 1, 2, 3, [ 4 ], 5 ]
+console.log(flattenDepth([1, [2, [3, [4]], 5]], 3)) // [ 1, 2, 3, 4, 5 ]
+```
+
+# 柯里化
+
+一句话解释就是**参数够了就执行，参数不够就返回一个函数，之前的参数存起来，直到够了为止** 。
+
+``` javascript
+ function curry(func) {
+   var l = func.length
+   return function curried() {
+     var args = [].slice.call(arguments)
+     if(args.length < l) {
+       return function() {
+         var argsInner = [].slice.call(arguments)
+         return curried.apply(this, args.concat(argsInner))
+       }
+    } else {
+      return func.apply(this, args)
+    }
+  }
+}
+
+var f = function(a, b, c) {
+  return console.log([a, b, c])
+};
+
+var curried = curry(f)
+curried(1)(2)(3) // => [1, 2, 3]
+curried(1, 2)(3) // => [1, 2, 3]
+curried(1, 2, 3) // => [1, 2, 3]
+```
+
 # 为元素添加on方法
 
 ```javascript
@@ -1521,3 +2183,8 @@ function utf8_decode(str_data) {
 [JS常用开发工具函数](https://mp.weixin.qq.com/s?__biz=MzUzOTM0MTE4OQ==&mid=2247485899&idx=1&sn=de526f7f1d2ff1b42b90acc196937845&chksm=fac8b121cdbf3837823eb0be690995448c15712144784a13c08c2eca04a35bc74145d4e51563&mpshare=1&scene=1&srcid=0702WArToY4Zf2DneCeKOUoB&sharer_sharetime=1590937398297&sharer_shareid=3513f92f23030a0a67fb38005d1b6a29&key=5a8ad89db03556ba46925cff95d066a2df5a1d5e094bc547591a271e87a02b52912188eb823da168e5f8a53a67a9ebec0966381c3f733daff7ddbe868b913ff526fb7116394abe7ebaebfe29d620fc81&ascene=1&uin=MjU3MDI1Njk0MA%3D%3D&devicetype=Windows+10+x64&version=62090070&lang=zh_CN&exportkey=AYuk7Hyn2g9m%2F3%2FguTy9qU4%3D&pass_ticket=tlYkCwsVMifHd%2B0aIDak4asRIQAnO44krb6gL09ZBy8PXxCTYCFw6N1GoCZ9j5uG)
 
 https://github.com/Wscats/CV/issues/27
+
+[常见函数](https://mp.weixin.qq.com/s?__biz=MzI0MjU2NDAzNg==&mid=2247484824&idx=1&sn=1c9fc5b3310966fdcbadd436420a9005&chksm=e97b2b33de0ca2255fab8c88eeb41fc582a27792fa5d83ee9613d6538700138b401bffa6f553&mpshare=1&scene=1&srcid=0607D41r6HIeKvnND5wOXbN7&sharer_sharetime=1591532631985&sharer_shareid=3513f92f23030a0a67fb38005d1b6a29&key=aa494bdf4b4d432b93b7314bb1484e169b6fcf79fb08fb265c503ba4735e1c12be235689a04bac70f76f1608ca506093645d25faed1268fe800e71f9c37c49a9119773966e748e0eb19f4fb595d126dc&ascene=1&uin=MjU3MDI1Njk0MA%3D%3D&devicetype=Windows+10+x64&version=62090070&lang=zh_CN&exportkey=AYnr%2BjV5F8NJ%2Bw3wVg6O5oY%3D&pass_ticket=4ivJL1%2BM8e0a98rw%2FTvUhJUE7jMnZAFS%2FmdjHYPo6UGmzIk2G49W6HxA5pv94EBm)
+
+[防抖](https://mp.weixin.qq.com/s?__biz=MjM5MzUxNTgyMg==&mid=2455602711&idx=1&sn=71532346e04a9894a566188d3e85daea&chksm=b13cf656864b7f40174e4a827b1c5dfb5ebb542837e5cde067350bc61c6b1428c1298c6c8195&mpshare=1&scene=1&srcid=0607LJZiEWYJWZdqO8E1JC7I&sharer_sharetime=1591532869066&sharer_shareid=3513f92f23030a0a67fb38005d1b6a29&key=e6152aaf211ea82497530d90078e6191de13d495e1d3394958d2eb78cc41dbcb89cb81c696531e31add258def72727a991d5a9ab331e0110f787f90a65a6420e55fdfade59b7542eabed3f7792dc5417&ascene=1&uin=MjU3MDI1Njk0MA%3D%3D&devicetype=Windows+10+x64&version=62090070&lang=zh_CN&exportkey=AfUjrsawVfc6J%2FnX1gThuLM%3D&pass_ticket=4ivJL1%2BM8e0a98rw%2FTvUhJUE7jMnZAFS%2FmdjHYPo6UGmzIk2G49W6HxA5pv94EBm)
+
