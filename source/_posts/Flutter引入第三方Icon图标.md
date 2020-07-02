@@ -7,7 +7,7 @@ categories:
     - Flutter
 ---
 
-**Flutter虽然内置了很多Icon图标，但是还是需要引入自己或第三方图标库提供的Icon。下面是解决办法。改文章以[阿里巴巴图标库](http://iconfont.cn/)为例。**
+**Flutter虽然内置了很多Icon图标，但是还是需要引入自己或第三方图标库提供的Icon。下面是解决办法。本文以[阿里巴巴图标库](http://iconfont.cn/)为例。**
 
 <!-- more -->
 
