@@ -184,6 +184,20 @@ public interface Base<K, V> {
 }
 ```
 
+# 多种泛型约束
+
+``` java
+public static <T extends Comparable<T> & Supplier<R>, R extends Number> {
+  R callMax(T a, R b) {
+    if (a.compareTo(b) > 0) {
+      return a.get();
+    } else {
+      return b.get();
+    }
+  }
+}
+```
+
 # **泛型二级抽象类或接口**
 
 ``` java
