@@ -81,7 +81,7 @@ Mac、Linux下路径`/etc/hosts`
 # GitHub End
 ```
 
-保存即可，**该文件随时可能变更，请随时自行更新**
+保存即可，**该文件随时可能变更，请随时自行更新，可以在该项目中查看最新Hosts：[Github520](https://github.com/521xueweihan/GitHub520)**
 
 > window下无法保存，没有修改权限，鼠标右键-属性-安全-修改权限；或将`hosts`文件复制一份，修改之后，复制到原文件夹替换！
 
@@ -130,3 +130,5 @@ https://www.ipaddress.com/
 https://www.jianshu.com/p/30e2703a5647
 
 https://blog.csdn.net/qq_38232598/article/details/91346392
+
+https://juejin.im/post/5f18683af265da22f84d7602?utm_source=gold_browser_extension
