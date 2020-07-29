@@ -2,9 +2,9 @@
 title: 深入理解Java泛型
 date: 2020-07-23 13:21:29
 tags:
-    - JAVA
+    - Java
 categories:
-    - JAVA
+    - Java
 ---
 
 # 泛型的定义
