@@ -6,8 +6,8 @@ Github Page： https://github.blog.si-yee.com
 
 # CI部署
 
-Github Action自动化部署到Github Page
+`Github Action`自动化部署到Github Page
 
-Jenkins自动化部署到个人云服务器
+`Jenkins`自动化部署到个人云服务器
 
-脚本代码自行查看。
+> 脚本代码自行查看。
