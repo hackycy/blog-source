@@ -20,7 +20,7 @@ pipeline {
         sh 'rm -rf /www/wwwroot/blog.si-yee.com/backup'
         sh 'mkdir -p /www/wwwroot/blog.si-yee.com/static'
         sh 'mkdir -p rm -rf /www/wwwroot/blog.si-yee.com/backup'
-        sh 'tar -zxvf /www/wwwroot/blog.si-yee.com/deploy.tar.gz -C /www/wwwroot/blog.si-yee.com/backup'
+        sh 'tar -zxvf /www/wwwroot/blog.si-yee.com/deploy.tar.gz -C /www/wwwroot/blog.si-yee.com/backup/'
         sh 'cp -R /www/wwwroot/blog.si-yee.com/backup/deploy_git/* /www/wwwroot/blog.si-yee.com/static/'
       }
     }
