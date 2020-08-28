@@ -14,7 +14,6 @@ date: 2018-09-07 13:47:54
 
 <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=167844&auto=1&height=66"></iframe>
 
-
 ---      
       
 # 联系方式
@@ -30,7 +29,6 @@ date: 2018-09-07 13:47:54
  - 工作年限：2年
  - 技术博客：https://blog.si-yee.com
  - Github：http://github.com/hackycy
-
  - 期望职位：Android开发（跨平台或H5端方向）
  - 期望薪资：税前月薪10k
 
@@ -60,15 +58,13 @@ date: 2018-09-07 13:47:54
 - Web框架：EggJs/TypeORM（了解）
 - 前端框架：Vue（了解）
 - 前端工具：Webpack（了解）
-- 数据库相关：MySQL（了解）/SQLite
-- 版本管理、文档和自动化部署工具：Git
+- 数据库相关：MySQL（了解）/SQLite/Redis（了解）
+- 版本管理、文档和自动化部署工具：Git/Jenkins（了解）/Github Action（了解）
 - 移动端：Android、iOS（了解）
 - 跨平台：Flutter（了解）
     
 # 致谢
 感谢您花时间阅读我的简历，期待能有机会和您共事。
-    
-    
 <!-- endtab -->
 
 <!-- tab vlog -->
