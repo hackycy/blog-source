@@ -2,10 +2,10 @@
 title: egg-core源码分析
 date: 2020-08-26 11:17:20
 tags:
-    - Nodejs
+    - NodeJS
     - Egg
 categories:
-    - Nodejs
+    - NodeJS
 ---
 
 # 前言

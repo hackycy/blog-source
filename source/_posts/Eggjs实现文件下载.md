@@ -2,10 +2,10 @@
 title: Eggjs实现文件下载
 date: 2020-05-28 11:47:55
 tags:
-    - Nodejs
+    - NodeJS
     - Egg
 categories:
-    - Nodejs
+    - NodeJS
 ---
 
 # 前言
