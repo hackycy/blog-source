@@ -18,15 +18,10 @@ date: 2018-09-07 13:47:54
 
 # 联系方式
 
-- 手机：15622472425
 - Email：zjyzy5201314@gmail.com || qa894178522@qq.com
-- QQ/微信号：与手机号同步
 
 # 个人信息
 
- - 长源/男/1997
- - 大专/广东水利电力职业技术学院 
- - 工作年限：2年
  - 技术博客：https://blog.si-yee.com
  - Github：http://github.com/hackycy
  - 期望职位：Android开发（跨平台或H5端方向）
