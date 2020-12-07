@@ -310,13 +310,13 @@ console.log(window.devicePixelRatio); //10
 
 **完全缩小的情况下：visual viewport = layout viewport**
 
-![](vv=lv.jpg)
+![](vvlv.jpg)
 
 浏览器选择了布局视口的尺寸，使其在完全缩小模式下完全覆盖屏幕（因此等于可视视口）.
 
 **不完全缩小的情况下：layout viewport > visual viewport**
 
-![](lv>vv.jpg)
+![](lvvv.jpg)
 
 布局视口的宽度和高度等于在不完全缩小模式下可以在屏幕上显示的任何宽度和高度。当用户放大这些尺寸时保持不变。
 
