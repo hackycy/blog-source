@@ -24,7 +24,6 @@ date: 2018-09-07 13:47:54
 
  - 技术博客：https://blog.si-yee.com
  - Github：http://github.com/hackycy
- - 期望职位：Android开发（跨平台或H5端方向）
 
 # 开源项目和作品
 
