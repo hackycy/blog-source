@@ -18,7 +18,7 @@ date: 2018-09-07 13:47:54
 
 # 联系方式
 
-- Email：zjyzy5201314@gmail.com || qa894178522@qq.com
+- Email：zjyzy5201314@gmail.com \ qa894178522@qq.com
 
 # 个人信息
 
