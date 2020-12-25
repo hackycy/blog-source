@@ -154,7 +154,7 @@ class HYSizeFit {
     return HYSizeFit.rpx * size * 2;
   }
   
-  // 按照rxp来设置
+  // 按照rpx来设置
   static double setRpx(double size) {
     return HYSizeFit.rpx * size;
   }
