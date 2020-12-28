@@ -58,11 +58,12 @@ date: 2018-09-07 13:47:54
 - 跨平台：Flutter（了解）
   
 # 致谢
+
 感谢您花时间阅读我的简历，期待能有机会和您共事。
 <!-- endtab -->
 
 <!-- tab vlog -->
-<center><b>ZJ & YZY 的 VLOG</b></center>
+<center><b>初心</b></center>
 
 ### [初心](https://www.bilibili.com/video/BV1Jv41167jp/)
 
