@@ -1,6 +1,6 @@
 # 博客
 
-个人博客：https://blog.si-yee.com
+个人博客地址：https://blog.si-yee.com
 
 # CI部署
 
