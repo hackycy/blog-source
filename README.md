@@ -6,5 +6,3 @@
 
 `Github Action`自动化部署到Github Page
 
-> 脚本代码自行查看。
-
