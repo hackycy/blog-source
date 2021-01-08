@@ -6,14 +6,12 @@ date: 2018-09-07 13:47:54
 ------
 
 <center><b>移动端爱好者,喜欢探索新事物</b></center>
-
 ------
 
 {% tabs Tab标签列表 %}
 <!-- tab 个人简介 -->
 
 <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=167844&auto=1&height=66"></iframe>
-
 ---
 
 # 联系方式
@@ -27,13 +25,10 @@ date: 2018-09-07 13:47:54
 
 # 开源项目和作品
 
-## 校内奖项
-
-- 蓝桥杯比赛（三等奖）
-
 ## 开源项目
 
   - [flutter-picgo](https://github.com/PicGo/flutter-picgo)：快速上传图片并获取图片URL链接的手机版工具
+  - [sf-egg-admin](https://github.com/hackycy/sf-egg-admin)：基于EggJs + TypeScript + TypeORM + Redis + MySql + Vue + Element-UI编写的一款简单高效的前后端分离的权限管理系统
   - [OSVsPush](https://github.com/hackycy/OSVsPush)：Vivo、Oppo、华为、小米、魅族系统厂商推送统一集成
   - [lover](https://github.com/hackycy/lover)：网页版爱情计时
   - [更多](https://github.com/hackycy)
@@ -64,7 +59,6 @@ date: 2018-09-07 13:47:54
 
 <!-- tab vlog -->
 <center><b>初心</b></center>
-
 ### [初心](https://www.bilibili.com/video/BV1Jv41167jp/)
 
 <iframe src="//player.bilibili.com/player.html?aid=243491393&bvid=BV1Jv41167jp&cid=199882009&page=1" style="width:100%;height:500px;" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
