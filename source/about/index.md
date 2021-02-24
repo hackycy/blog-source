@@ -43,14 +43,13 @@ date: 2018-09-07 13:47:54
 
 以下均为我熟练使用的技能（未标注了解即为熟悉）
 
-- Web开发：Node（了解）
+- Web开发：NodeJS
 - Web框架：EggJs/TypeORM
-- 前端框架：Vue
-- 前端工具：Webpack（了解）
-- 数据库相关：MySQL（了解）/SQLite/Redis（了解）
-- 版本管理、文档和自动化部署工具：Git/Jenkins（了解）/Github Action（了解）
-- 移动端：Android、iOS（了解）
-- 跨平台：Flutter（了解）
+- 前端框架：Vue、ElementUI
+- 前端工具：Webpack
+- 数据库相关：MySQL/SQLite/Redis
+- 版本管理、文档和自动化部署工具：Git/Jenkins/Github Action
+- 移动端：Android、iOS、Flutter
   
 # 致谢
 
