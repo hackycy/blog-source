@@ -100,3 +100,4 @@ upload.addEventListener('change', function(e) {
 });
 ```
 
+> [案例源码](https://github.com/hackycy/practice-examples/blob/master/javascript/canvas/compress.html)
