@@ -263,6 +263,62 @@ Web服务器角色直接点击下一步
 
 ![](test_4.png)
 
+## Win10环境
+
+打开`设置`—`网络和Internet`—`VPN`
+
+![](wtest_1.png)
+
+配置如图所示
+
+![](wtest_2.png)
+
+![](wtest_3.png)
+
+# 错误修复
+
+这边测试在Win7或Win10连接时会出现`无法建立计算机与VPN服务器之间的网络连接,因为远程服务器未响应`的问题。查找了文章修复了问题。
+
+## 错误1：因为没有修改过注册表，所以是报这样的错误
+
+![](fix_1.jpg)
+
+**解决办法**
+
+按`windows图标键 + R键` >在运行中输入`regedit`，单击`确定`，进入`注册表编辑器`
+
+![](fix_2.png)
+
+在注册表编辑器”页面的左侧导航树点开 `HKEY_LOCAL_MACHINE`>`SYSTEM`>`CurrentControlSet`>`Services`>`PolicyAgent`
+
+![](fix_3.jpg)
+
+在右边空白处新建 > `DWORD值`，名称为`AssumeUDPEncapsulationContextOnSendRule`
+
+![](fix_4.jpg)
+
+右键单击`AssumeUDPEncapsulationContextOnSendRule`，选择“修改”，进入修改界面，修改值为`2`(表示可以与位于NAT设备后方的服务器建立安全关联)
+
+![](fix_5.jpg)
+
+> 重启电脑即可。一般Win7配置完该步骤后即可连接，但Win10还会出现问题。
+
+## 错误2：修改完注册表，错误就变了，是因为认证的协议问题
+
+![](fix_6.jpg)
+
+**解决办法**
+
+打开更改适配器选项，找到对应的VPN名称的适配器，右键属性
+
+![](fix_7.jpg)
+
+打开安全选项，选择使用这些协议勾上；注意此处还有高级设置里面的L2TP身份验证类型，这里也要填写的（秘钥方式还是证书方式）
+
+![](fix_8.jpg)
+
+> 再次连接，即可修复
+
 # 参考教程
 
 https://www.365jz.com/article/24912
